@@ -1,0 +1,116 @@
+{
+    "title": "Article Deadline Scraper",
+    "description": "Scrapes articles from websites extracting titles, links, deadlines, and published dates",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "startUrls": {
+            "title": "Start URLs",
+            "type": "array",
+            "description": "URLs to start crawling from",
+            "editor": "requestListSources",
+            "prefill": [
+                { "url": "https://www.opportunitiesforafricans.com/" },
+                { "url": "https://opportunitydesk.org/" }
+            ]
+        },
+        "articleSelector": {
+            "title": "Article Selector",
+            "type": "string",
+            "description": "CSS selector for article cards/containers",
+            "editor": "textfield",
+            "default": "article, .article, .post, .card"
+        },
+        "titleSelector": {
+            "title": "Title Selector",
+            "type": "string",
+            "description": "CSS selector for article titles (within article container)",
+            "editor": "textfield",
+            "default": "h1, h2, h3, .title, .headline"
+        },
+        "linkSelector": {
+            "title": "Link Selector",
+            "type": "string",
+            "description": "CSS selector for article links (within article container)",
+            "editor": "textfield",
+            "default": "a"
+        },
+        "dateSelector": {
+            "title": "Date Selector",
+            "type": "string",
+            "description": "CSS selector for published date (within article container)",
+            "editor": "textfield",
+            "default": ".date, .published, time, .timestamp"
+        },
+        "contentSelector": {
+            "title": "Content Selector",
+            "type": "string",
+            "description": "CSS selector for content area where deadlines may be found",
+            "editor": "textfield",
+            "default": ".content, .body, .description, p"
+        },
+        "maxRequestsPerCrawl": {
+            "title": "Max Requests",
+            "type": "integer",
+            "description": "Maximum number of pages to crawl",
+            "default": 100,
+            "minimum": 1,
+            "maximum": 10000
+        },
+        "followPagination": {
+            "title": "Follow Pagination",
+            "type": "boolean",
+            "description": "Whether to follow pagination links",
+            "default": true
+        },
+        "paginationSelector": {
+            "title": "Pagination Selector",
+            "type": "string",
+            "description": "CSS selector for next page links",
+            "editor": "textfield",
+            "default": ".next, .pagination a[rel=\"next\"], a.next-page"
+        },
+        "dateFilter": {
+            "title": "Date Filter",
+            "type": "string",
+            "description": "Only include opportunities posted within this time range",
+            "editor": "select",
+            "default": "week",
+            "enum": ["today", "week", "month", "all"],
+            "enumTitles": ["Today only", "Past 7 days", "Past 30 days", "All (no filter)"]
+        },
+        "enableKeywordFilter": {
+            "title": "Enable Keyword Filter",
+            "type": "boolean",
+            "description": "Only include opportunities matching climate/startup keywords",
+            "default": false
+        },
+        "useProxy": {
+            "title": "Use Residential Proxy",
+            "type": "boolean",
+            "description": "Use Apify residential proxy. Only enable if you're getting blocked. Uses more compute credits.",
+            "default": false
+        },
+        "googleSheetId": {
+            "title": "Google Sheet ID",
+            "type": "string",
+            "description": "The ID of your Google Sheet (from the URL: docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit). Leave empty to skip Google Sheets export.",
+            "editor": "textfield"
+        },
+        "googleSheetName": {
+            "title": "Sheet Name",
+            "type": "string",
+            "description": "Name of the sheet tab to use (default: Sheet1)",
+            "editor": "textfield",
+            "default": "Sheet1"
+        },
+        "googleCredentials": {
+            "title": "Google Service Account JSON",
+            "type": "string",
+            "description": "Paste the ENTIRE contents of your Google Service Account JSON file here. Get it from Google Cloud Console → APIs & Services → Credentials → Service Account → Keys → Create JSON key",
+            "editor": "textarea",
+            "isSecret": true
+        }
+    },
+    "required": ["startUrls"]
+}

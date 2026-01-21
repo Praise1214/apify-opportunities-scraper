@@ -1,0 +1,35 @@
+{
+    "actorSpecification": 1,
+    "name": "article-deadline-scraper",
+    "title": "Article Deadline Scraper",
+    "description": "Scrapes articles from websites, extracting titles, links, deadlines from content body, and published dates. Uses PlaywrightCrawler (real browser) to bypass Cloudflare protection.",
+    "version": "1.6",
+    "input": "./input_schema.json",
+    "dockerfile": "./Dockerfile",
+    "readme": "../README.md",
+    "storages": {
+        "dataset": {
+            "actorSpecification": 1,
+            "title": "Scraped Articles",
+            "description": "Articles with extracted data",
+            "views": {
+                "articles": {
+                    "title": "Articles",
+                    "transformation": {
+                        "fields": ["title", "link", "publishedDate", "deadlineDate", "sourceUrl"]
+                    },
+                    "display": {
+                        "component": "table",
+                        "properties": {
+                            "title": { "label": "Title", "format": "text" },
+                            "link": { "label": "URL", "format": "link" },
+                            "publishedDate": { "label": "Published", "format": "text" },
+                            "deadlineDate": { "label": "Deadline", "format": "text" },
+                            "sourceUrl": { "label": "Source", "format": "link" }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
