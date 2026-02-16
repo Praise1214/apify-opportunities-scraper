@@ -66,28 +66,25 @@ const MONTH_MAP = {
 export function extractDeadline(text) {
     if (!text) return null;
 
-    // Clean up the text
     const cleanText = text.replace(/\s+/g, ' ').trim();
 
-    // Only accept dates with deadline keywords
-    for (const pattern of DEADLINE_PATTERNS) {
-        pattern.lastIndex = 0;
-        const match = pattern.exec(cleanText);
-        if (match && match[1]) {
-            const context = cleanText.substring(Math.max(0, match.index - 40), Math.min(cleanText.length, match.index + 80));
-            // Debug log: show matched context
-            console.log('Deadline pattern matched:', pattern, 'Context:', context);
-            const deadline = match[1].trim();
-            // Only accept if the context contains a deadline keyword
-            if (/deadline|due date|apply by|closes on|closing date|submission deadline|applications? close|last date|expires?/i.test(context) && looksLikeDate(deadline)) {
-                return deadline;
-            }
-        }
-    }
+    // Pattern 1: "Application Deadline: Month DD, YYYY" (OFA format)
+    let pattern = /application\s+deadline\s*[:\-–—]?\s*([A-Za-z]+\s+\d{1,2}(?:st|nd|rd|th)?,?\s*\d{4})/i;
+    let match = cleanText.match(pattern);
+    if (match) return match[1].trim();
+
+    // Pattern 2: "Deadline: Month DD, YYYY" (OpportunityDesk format)
+    pattern = /(?:^|\s)deadline\s*[:\-–—]\s*([A-Za-z]+\s+\d{1,2}(?:st|nd|rd|th)?,?\s*\d{4})/i;
+    match = cleanText.match(pattern);
+    if (match) return match[1].trim();
+
+    // Pattern 3: Other deadline keywords
+    pattern = /(?:closing\s+date|closes?\s+on|submission\s+deadline|due\s+date|apply\s+by)[:\s]+([A-Za-z]+\s+\d{1,2}(?:st|nd|rd|th)?,?\s*\d{4})/i;
+    match = cleanText.match(pattern);
+    if (match) return match[1].trim();
 
     return null;
 }
-
 /**
  * Extract published date from element or text
  * @param {string} dateText - Direct date text from element
